@@ -14,7 +14,7 @@ export async function openDb () {
 
     try {
         const db = await openDb();
-            await db.run('INSERT INTO alunos(nome, matricula, turma, phoneResponsavel,nomeResponsavel, idChip) VALUES (?,?,?,?,?,?)', [aluno.nome, aluno.matrícula, aluno.turma, aluno.phoneResponsavel, aluno.nomeResponsavel, aluno.idChip]);
+            await db.run('INSERT INTO alunos(nome, matricula, turma, phoneResponsavel,nomeResponsavel, idChip) VALUES (?,?,?,?,?,?)', [aluno.nome, aluno.matricula, aluno.turma, aluno.phoneResponsavel, aluno.nomeResponsavel, aluno.idChip]);
         console.log("dados isneridos com sucesso.");
 
     } catch (error) {

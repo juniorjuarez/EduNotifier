@@ -1,7 +1,7 @@
 import {openDb, insertAluno, selectAllAlunos, selecAlunoChip} from '../db/configDB.js';
 import express from 'express';
 import twilio from 'twilio';
-import { Aluno } from '../db/db.js';
+//import { Aluno } from '../db/db.js';
 // Configuração do Twilio
 // const accountSid = 'AC6eb4ce1f6570bbf99e7c3575390e0040';
 // const authToken = 'f73302430c1ef942c7a5a1b657ec85af';
@@ -17,8 +17,6 @@ const sandboxNumber = 'whatsapp:+14155238886';
 const app = express();
 const PORT = 3333;
 
-const dbAluno = new Aluno();
-
 async function enviarMensagem(phone, nomeAluno) {
 
   if (!phone.includes("whatsapp:+55") || phone.includes("-")) {
@@ -30,7 +28,7 @@ async function enviarMensagem(phone, nomeAluno) {
   const newNumber = phone;
   
   console.log(newNumber)
-  const messageAluno = 'Olá, o aluno ' + nomeAluno + ' passou pela catraca da portaria';
+  const messageAluno = 'Olá, o(a) aluno(a) ' + nomeAluno + ' passou pela catraca da portaria';
   
   try {
       const message = await client.messages.create({
