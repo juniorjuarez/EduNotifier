@@ -1,3 +1,4 @@
+import {openDb, insertAluno, selectAllAlunos, selecAlunoChip} from '../db/configDB.js';
 import express from 'express';
 import twilio from 'twilio';
 import { Aluno } from '../db/db.js';
@@ -48,9 +49,9 @@ app.use(express.json());
 app.get('/alunos/', async (req, res) => {
   try {
     
-    const alunos = dbAluno.list();
+    const alunos = await selectAllAlunos();
     
-    res.status(200).send(alunos)
+    res.status(200).json(alunos)
     console.log(alunos)
     return alunos;
   } catch (error) {
@@ -63,54 +64,54 @@ app.get('/alunos/', async (req, res) => {
 app.post('/cadastraAluno', async (req, res) => {
   try {
     const body = req.body;
-    const { nome, idade, telefonePai, idChip } = req.body;
-    if(body.telefonePai.includes("-")){
+    console.log(req.body)
+    
+    // const { nome, idade, telefonePai, idChip } = req.body;
+    // if(body.telefonePai.includes("-")){
 
-      body.telefonePai = telefonePai.replace("-", '')
-    }
-    dbAluno.create({
-      nome,
-      idade,
-      telefonePai,
-      idChip
-    })
-  
+    //   body.telefonePai = telefonePai.replace("-", '')
+    // }
+
+    insertAluno(body)
+    // dbAluno.create({
+    //   nome,
+    //   idade,
+    //   telefonePai,
+    //   idChip
+    // })
     res.status(201).send(`Aluno ${body.nome} cadastrado com sucesso!`); // Uso do nome diretamente
 
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao cadastrar aluno: ",error);
     res.status(500).send("Erro ao cadastrar");
   }
 });
 
 app.post('/entradaAluno/:idChip', async (req, res) => {
-  const idChipReq = req.params.idChip;
-
-  const aluno = dbAluno.selectAluno(idChipReq);
-
-  if(aluno){
-
-    const { nome, idade, telefonePai, idChip } = aluno;
-    console.log(telefonePai)
-    enviarMensagem(telefonePai, nome)
-  }
-
-  res.status(200).send(aluno)
+ 
+ try {
+    
+    const idChipReq = req.params.idChip;
+    const aluno = await selecAlunoChip(idChipReq);
+    enviarMensagem(aluno.phoneResponsavel, aluno.nome)
+    console.log(aluno.nome)
+ 
+ 
+   res.status(200).json(aluno)
+ } catch (error) {
+   console.log("Erro: ",error)
+ }
  
 });
 
 app.get('/buscaAluno/:idChip', async(req, res)=>{
 try {
   
-  const idChipReq = req.params.idChip;
+   const idChipReq = req.params.idChip;
+   const aluno = await selecAlunoChip(idChipReq);
+   console.log(aluno.nome)
 
-  const aluno = dbAluno.selectAluno(idChipReq);
-
-  if(aluno){
-
-    const { nome, idade, telefonePai, idChip } = aluno;
-  }
-  res.status(200).send(aluno)
+  res.status(200).json(aluno)
 } catch (error) {
   console.log(error)
 }

@@ -1,0 +1,25 @@
+POST http://localhost:3333/cadastraAluno
+Content-Type: application/json
+
+  {
+        "nome": "João Silva",
+        "matricula": "2023001",
+        "turma": "1A",
+        "phoneResponsavel": "38992229666",
+        "nomeResponsavel": "Maria Silva",
+        "idChip": "chip123"
+    }
+###
+
+GET http://localhost:3333/alunos
+Content-Type: application/json
+
+###
+
+GET http://localhost:3333/buscaAluno/chip1
+Content-Type: application/json
+
+###
+
+POST http://localhost:3333/entradaAluno/chip1
+Content-Type: application/json
